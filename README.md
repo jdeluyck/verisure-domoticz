@@ -4,6 +4,9 @@ Scripts to query Verisure and pump the data into Domoticz
 ## License
 These scripts are licensed under the GPL 3.0. You can find the full license in the LICENSE file.
 
+## Credits
+These scripts wouldn't exist without [verisure module](https://github.com/persandstrom/python-verisure) by Per Sandström.
+
 ## importVerisure.py
 This script is designed to log into the Verisure API, and get out all the information of the system at that time.
 It then processes the devices specified in `vsure.ini` (see below) to see which ones it needs to upload into Domoticz.
