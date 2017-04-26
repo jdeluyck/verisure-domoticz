@@ -191,9 +191,7 @@ def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device):
 		logging.error ('ERROR: something went wrong querying Domoticz!')
 
 
-# Execute script
-if __name__ == '__main__':
-
+def main():
 	# Parse command line
 	arguments = parseArgs()
 
@@ -231,3 +229,7 @@ if __name__ == '__main__':
 	# Process Ethernet State
 	processUpdates('ethstate', config['sensorindex'][verisureOverview['latestEthernetStatus']['deviceLabel']], verisureOverview['latestEthernetStatus']['testDate'], verisureOverview['latestEthernetStatus'])
 
+
+# Execute script
+if __name__ == '__main__':
+	main()
