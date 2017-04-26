@@ -85,6 +85,7 @@ def callDomoticz(url):
 	return returnValue
 
 def getLastDomoticzUpdatedTimestamp(deviceIndex, timeZone):
+	global domoticzUrl
 	logging.debug ('** Entered getLastDomoticzUpdatedTimestamp(%s) **', deviceIndex)
 	output = callDomoticz(domoticzUrl + 'type=devices&rid=' + str(deviceIndex))
 	if output != -1:
@@ -111,7 +112,9 @@ def getVerisureInfo(verisureUser, verisurePw):
 	
 	return verisureOverview
 
-def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device):	
+def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device, timeZone):	
+	global config, domoticzUrl
+	
 	if 'deviceLabel' not in device:
 		device['deviceLabel'] = deviceType.upper()
 
@@ -192,8 +195,6 @@ def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device):
 
 
 def main():
-	global domoticzUrl
-	
 	# Parse command line
 	arguments = parseArgs()
 
