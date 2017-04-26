@@ -65,10 +65,10 @@ def parseConfig(configFile):
 		
 		return config
 		
-def callDomoticz(URL):
-	logging.debug ('** Entered CallDomoticz(%s) **', URL)
+def callDomoticz(url):
+	logging.debug ('** Entered CallDomoticz(%s) **', url)
 
-	response = urllib.request.urlopen(URL)
+	response = urllib.request.urlopen(url)
 	httpOutput = response.read().decode('utf-8')
 	output = json.loads(httpOutput)
 	logging.debug ('Output: %s', output)
@@ -84,11 +84,11 @@ def callDomoticz(URL):
 
 	return returnValue
 
-def getLastDomoticzUpdatedTimestamp(deviceIndex):
+def getLastDomoticzUpdatedTimestamp(deviceIndex, timeZone):
 	logging.debug ('** Entered getLastDomoticzUpdatedTimestamp(%s) **', deviceIndex)
 	output = callDomoticz(domoticzUrl + 'type=devices&rid=' + str(deviceIndex))
 	if output != -1:
-		returnValue = arrow.get(arrow.get(output['LastUpdate']).naive, config['global']['timezone']).timestamp
+		returnValue = arrow.get(arrow.get(output['LastUpdate']).naive, timeZone).timestamp
 	else:
 		returnValue = output
 
@@ -111,14 +111,14 @@ def getVerisureInfo(verisureUser, verisurePw):
 	
 	return verisureOverview
 
-def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device):
+def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device):	
 	if 'deviceLabel' not in device:
 		device['deviceLabel'] = deviceType.upper()
 
 	logging.info ('Now processing device %s (sensorIdx %s)', device['deviceLabel'], sensorIdx)
 	
 	# get last updated time in Domoticz
-	lastUpdatedDomoticz = getLastDomoticzUpdatedTimestamp(sensorIdx)
+	lastUpdatedDomoticz = getLastDomoticzUpdatedTimestamp(sensorIdx,config['global']['timezone'])
 	
 	if lastUpdatedDomoticz != -1:
 		logging.info (' - Last Updated in Domoticz: %s', arrow.get(lastUpdatedDomoticz).naive)	
