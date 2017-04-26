@@ -195,6 +195,7 @@ def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device):
 
 
 def main():
+	global domoticzUrl, config
 	# Parse command line
 	arguments = parseArgs()
 
