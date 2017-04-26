@@ -56,8 +56,8 @@ arm state = XX
   * The `domoticz` section contains parameters needed to connect to your Domoticz instance.
   * the `verisure` section specifies your username (email) and password to get into verisure.
   * `global` contains the timezone your domoticz is running in (specifying local here takes the time from /etc/timezone), and the default loglevel you want. You can choose from DEBUG, INFO, WARNING and ERROR.
-  * `sensorindex` is the most important block: here you need to specify the sensor index from Domoticz.
-
+  * `sensorindex` is the block where you need to match up the serial ID if your Verisure components with the sensor index in Domoticz.  
+    Say your device has an identifier of JC2B XYZB, and the device identifier in Domoticz is 10, you'll need to add a line reading `JC2B XYZB = 10`. 
 
 ### Command line parameters
 
