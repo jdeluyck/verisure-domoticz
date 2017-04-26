@@ -112,7 +112,7 @@ def getVerisureInfo(verisureUser, verisurePw):
 	
 	return verisureOverview
 
-def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device, timeZone):	
+def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device):	
 	global config, domoticzUrl
 	
 	if 'deviceLabel' not in device:
