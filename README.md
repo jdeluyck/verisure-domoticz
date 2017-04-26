@@ -56,11 +56,25 @@ arm state = XX
   * The `domoticz` section contains parameters needed to connect to your Domoticz instance.
   * the `verisure` section specifies your username (email) and password to get into verisure.
   * `global` contains the timezone your domoticz is running in (specifying local here takes the time from /etc/timezone), and the default loglevel you want. You can choose from DEBUG, INFO, WARNING and ERROR.
-  * `sensorindex` is the block where you need to match up the serial ID if your Verisure components with the sensor index in Domoticz.  
-    Say your device has an identifier of JC2B XYZB, and the device identifier in Domoticz is 10, you'll need to add a line reading `JC2B XYZB = 10`. 
+  * `sensorindex` is the block where you need to match up the serial ID if your Verisure components with the sensor index in Domoticz. Say your device has an identifier of JC2B XYZB, and the device identifier in Domoticz is 10, you'll need to add a line reading `JC2B XYZB = 10`.
+    You also need to keep the lines `sms count = xx` and `arm state = xx`, and specify the sensor index from Domoticz. These reflect the SMS counter and the alarm armed status.
 
 ### Command line parameters
+The easiest way to get them is to ask for them ;)
+```
+$ ./importVerisure.py -h
+usage: importVerisure.py [-h] [-l {info,warning,error,debug}] [-c CONFIGFILE]
 
+Import Verisure information into Domoticz
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -l {info,warning,error,debug}, --log {info,warning,error,debug}
+                        Specifies the loglevel to be used
+  -c CONFIGFILE, --config CONFIGFILE
+                        Name of the configuration file to use (default:
+                        vsure.ini
+```
 
 ### Scheduling through cron
 Easy as
