@@ -9,7 +9,7 @@ import os.path
 import urllib.request 
 import verisure
 
-# Version 0.1
+# Version 0.2
 # Author: Jan De Luyck (jan@kcore.org) 
 #
 # This script depends on the verisure module by Per Sandström, 
@@ -19,24 +19,10 @@ import verisure
 # output of 
 #	vsure 'user' 'password' overview 
 
-################################
-# Device config
-# Create a dummy hardware device, and add per item you want in 
-# Domoticz a Virtual Sensor
-# - Temperature + Humidity: smoke detectors
-# - Temperature: Siren
-# - Switch (on/off): door/window locks (on/off), ethernet status 
-# - Switch (selector): arm state, add off/arm stay / arm away
-# - Custom Sensor (X Axis: SMS count): SMS
-#
-# Add the Verisure identifiers _and_ the device ID's (which you can find on 
-# the devices view) to vsure.ini (or your own ini file)
-# Please keep the identifiers 'sms count' and 'arm state' for the smscount and 
-# alarm state respectively
-
 #################################
 def parseArgs():
 	parser = argparse.ArgumentParser(description = 'Import Verisure information into Domoticz', prog='importVerisure.py')
+	parser.add_argument('-v', '--version', action='version', version='%(prog)s 0.2')
 	parser.add_argument('-l', '--log', dest='logLevel',type=str, choices=['info', 'warning', 'error', 'debug'], help='Specifies the loglevel to be used')
 	parser.add_argument('-c', '--config', dest='configFile', default='vsure.ini', type=str, help='Name of the configuration file to use (default: %(default)s')
 
@@ -55,10 +41,14 @@ def parseConfig(configFile):
 		config['global'] = { 'loglevel':'warning', 'timezone':'local'}
 		config['sensorindex'] = { 'sms count':'XX', 'arm state':'XX', 'AAAA BBBB':'XX'}
 		
-		with open(configFile, 'w') as file:
-			config.write(file)			
-		
-		print ("A default (empty) config file was written as %s. Please review and re-run this script.", configFile)
+		try:
+			with open(configFile, 'w') as file:
+				config.write(file)
+		except IOError as e:
+			logging.error ('Error when writing the default (empty) config file %s: %s', configFile, str(e.reason))
+		else:
+			logging.warning ('A default (empty) config file was written as %s. Please review and re-run this script.', configFile)
+
 		exit (1)
 	else:
 		config.read(configFile)
@@ -68,8 +58,27 @@ def parseConfig(configFile):
 def callDomoticz(url):
 	logging.debug ('** Entered CallDomoticz(%s) **', url)
 
-	response = urllib.request.urlopen(url)
-	httpOutput = response.read().decode('utf-8')
+	try:
+		response = urllib.request.urlopen(url)
+		httpOutput = response.read().decode('utf-8')
+	except urllib.error.HTTPError as e:
+			logging.error ('HTTP Error encountered connecting to URL %s', url)
+			logging.error('%s', str(e.reason))
+			exit(1)
+	except urllib.error.URLError as e:
+			logging.error('URL Error encountered connecting to URL %s', url)
+			logging.error('%s', str(e.reason))
+			exit (1)
+	except httplib.HTTPException as e:
+			logging.error ('HTTP Exception encountered connecting to URL %s', url)
+			logging.error('%s', str(e.reason))
+			exit(1)
+	except Exception:
+			import traceback
+			logging.error('Other error encountered connecting to URL %s', url)
+			logging.error(traceback.format_exc())
+			exit(1)
+
 	output = json.loads(httpOutput)
 	logging.debug ('Output: %s', output)
 
@@ -89,7 +98,11 @@ def getLastDomoticzUpdatedTimestamp(deviceIndex, timeZone):
 	logging.debug ('** Entered getLastDomoticzUpdatedTimestamp(%s) **', deviceIndex)
 	output = callDomoticz(domoticzUrl + 'type=devices&rid=' + str(deviceIndex))
 	if output != -1:
-		returnValue = arrow.get(arrow.get(output['LastUpdate']).naive, timeZone).timestamp
+		if 'LastUpdate' in output:
+			returnValue = arrow.get(arrow.get(output['LastUpdate']).naive, timeZone).timestamp
+		else:
+			logging.error ('WARNING: device %s does not exist in Domoticz! Please check configuration!', str(deviceIndex))
+			returnValue = -1
 	else:
 		returnValue = output
 
@@ -101,9 +114,23 @@ def getVerisureInfo(verisureUser, verisurePw):
 	logging.debug ('** Entered getVerisureInfo(username,password) **')
 	# Connect to Verisure and get all the data
 	verisureSession = verisure.Session(verisureUser, verisurePw);
-	verisureSession.login()
-	verisureOverview = verisureSession.get_overview()
-	verisureSession.logout()
+	try:
+		verisureSession.login()
+	except:
+		logging.error ('Error when logging into Verisure. Please check your username and password!')
+		exit (1)
+
+	try:
+		verisureOverview = verisureSession.get_overview()
+	except:
+		logging.error ('Error when getting the Verisure overview!')
+		exit (1)
+
+	try:
+		verisureSession.logout()
+	except:
+		logging.error ('Error when logging out of Verisure. Please check your username and password!')
+		exit (1)
 
 	logging.debug ('Verisure output:')
 	logging.debug ('************************')
@@ -157,12 +184,12 @@ def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device):
 				
 			elif deviceType == 'armstate':
 				# Alarm Arm status
-				if device['statusType'] == "DISARMED":
+				if device['statusType'] == 'DISARMED':
 					alarmState = '0'
-				elif device['statusType'] == "ARMED_HOME":
+				elif device['statusType'] == 'ARMED_HOME':
 					alarmState = '10'
-				elif device['statusType'] == "ARMED_AWAY":
-					alarmStateu = '20'
+				elif device['statusType'] == 'ARMED_AWAY':
+					alarmState = '20'
 					
 				logging.info (' - Updating alarm state to %s', alarmState)
 				requestUrl = 'type=command&param=switchlight&idx=' + sensorIdx + '&switchcmd=Set%20Level&level=' + alarmState
@@ -191,7 +218,7 @@ def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device):
 		else:
 			logging.info (' - Not updating Domoticz')
 	else:
-		logging.error ('ERROR: something went wrong querying Domoticz!')
+		logging.error ('ERROR: No valid response returned by Domoticz. Please check configuration!')
 
 
 def main():
@@ -200,7 +227,7 @@ def main():
 	arguments = parseArgs()
 
 	# Read config
-	config = parseConfig(arguments["configFile"])
+	config = parseConfig(arguments['configFile'])
 
 	# Overwrite loglevel, it can be passed on command line
 	if arguments['logLevel'] != None:

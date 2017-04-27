@@ -66,12 +66,14 @@ arm state = XX
 The easiest way to get them is to ask for them ;)
 ```
 $ ./importVerisure.py -h
-usage: importVerisure.py [-h] [-l {info,warning,error,debug}] [-c CONFIGFILE]
+usage: importVerisure.py [-h] [-v] [-l {info,warning,error,debug}]
+                         [-c CONFIGFILE]
 
 Import Verisure information into Domoticz
 
 optional arguments:
   -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
   -l {info,warning,error,debug}, --log {info,warning,error,debug}
                         Specifies the loglevel to be used
   -c CONFIGFILE, --config CONFIGFILE
@@ -84,5 +86,5 @@ Easy as
 ```
 */10 * * * * /home/domoticz/importVerisure.py
 ```
-I don't know what the call limit is on the API, but I've not gotten any errors with a 10-minute interval.
 
+I don't know what the call limit is on the API, but I've not gotten any errors with a 10 minute interval.
