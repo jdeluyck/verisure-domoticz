@@ -23,7 +23,7 @@ Next, you need to add (using `Create virtual Sensors`) the following sensors **p
   * Door/window magnetic lock: Switch (on/off)
   * Ethernet status: Switch (on/off)
 
-I don't have any other devices in my own setup right now, so I'm not 100% sure on what sensor information I need. Feel free to [add an issue](https://github.com/jdeluyck/verisure-domoticz/issues/new) with additional information!
+I don't own any other devices (smart plugs, camera's, ...) in my own setup, so I'm not 100% sure on what sensor information I need. Feel free to [add an issue](https://github.com/jdeluyck/verisure-domoticz/issues/new) with additional information. Ideally add the output of `vsure youruser yourpass overview`, but remove any sensitive info (like actual component identifiers).
 
 You'll also need the following sensors (mandatory):
   * SMS Counter: Custom Sensor, X Axis: SMS Count

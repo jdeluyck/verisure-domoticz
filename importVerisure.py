@@ -52,7 +52,28 @@ def parseConfig(configFile):
 		exit (1)
 	else:
 		config.read(configFile)
+
+		# Verify the basics of the config
+		requiredKeys = {}
+		requiredKeys['domoticz'] = {'protocol', 'host', 'port'}
+		requiredKeys['verisure'] = {'username', 'password'}
+		requiredKeys['global'] = {'loglevel', 'timezone'}
+		requiredKeys['sensorindex'] = {'sms count', 'arm state'}
+
+		for section in requiredKeys:
+			if not section in config:
+				logging.error ('Error: section %s is missing. Please check your config file %s!', section, configFile)
+				exit(1)
+			else:
+				for key in requiredKeys[section]:
+					if not key in config[section]:
+						logging.error ('Error: mandatory key %s is missing in section %s. Please check your config file %s!', key, section, configFile)
+						exit(1)
+					elif not config[section][key]:
+						logging.error ('Error: mandatory key %s is empty in section %s. Please check your config file %s!', key, section, configFile)
+						exit(1)
 		
+		# If we survive here, I guess we have a valid config.
 		return config
 		
 def callDomoticz(url):
@@ -89,7 +110,7 @@ def callDomoticz(url):
 			returnValue = output
 	else:
 		returnValue = -1
-		logging.error ('ERROR: error occurred querying Domoticz! Full output available in debug.')
+		logging.error ('Error: error occurred querying Domoticz! Full output available in debug.')
 
 	return returnValue
 
@@ -101,7 +122,7 @@ def getLastDomoticzUpdatedTimestamp(deviceIndex, timeZone):
 		if 'LastUpdate' in output:
 			returnValue = arrow.get(arrow.get(output['LastUpdate']).naive, timeZone).timestamp
 		else:
-			logging.error ('WARNING: device %s does not exist in Domoticz! Please check configuration!', str(deviceIndex))
+			logging.error ('Warning: device %s does not exist in Domoticz! Please check configuration!', str(deviceIndex))
 			returnValue = -1
 	else:
 		returnValue = output
@@ -205,20 +226,20 @@ def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device):
 				requestUrl = 'type=command&param=switchlight&idx=' + sensorIdx + '&switchcmd=' + ethernetState
 				
 			else:
-				logging.error ('ERROR: Unknown device type!')
+				logging.error ('Error: Unknown device type!')
 				requestUrl = None
 				
 			if requestUrl != None:
 				output = callDomoticz(domoticzUrl + requestUrl)
 
 				if output == -1:
-					logging.error ('ERROR: Update not sent to Domoticz for device %s!', sensorIdx)
+					logging.error ('Error: Update not sent to Domoticz for device %s!', sensorIdx)
 				else:
 					logging.info (' - Update sent successfully to Domoticz')
 		else:
 			logging.info (' - Not updating Domoticz')
 	else:
-		logging.error ('ERROR: No valid response returned by Domoticz. Please check configuration!')
+		logging.error ('Error: No valid response returned by Domoticz. Please check configuration!')
 
 
 def main():
