@@ -4,11 +4,12 @@
 
 import argparse
 import configparser
+import logging
 import os.path
 
-def parseArgs(callName):
-	parser = argparse.ArgumentParser(description = 'Import Verisure information into Domoticz', prog=callName)
-	parser.add_argument('-v', '--version', action='version', version='%(prog)s 0.2')
+def parseArgs(progName, progVersion):
+	parser = argparse.ArgumentParser(description = 'Import Verisure information into Domoticz', prog=progName)
+	parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + progVersion)
 	parser.add_argument('-l', '--log', dest='logLevel',type=str, choices=['info', 'warning', 'error', 'debug'], help='Specifies the loglevel to be used')
 	parser.add_argument('-c', '--config', dest='configFile', default='vsure.ini', type=str, help='Name of the configuration file to use (default: %(default)s')
 
@@ -16,7 +17,7 @@ def parseArgs(callName):
 							
 	return vars(results)
 
-def parseConfig(configFile):
+def parseConfig(configFile, additionalConfigSection=''):
 	config = configparser.ConfigParser()
 	
 	if not os.path.isfile(configFile):
@@ -25,6 +26,7 @@ def parseConfig(configFile):
 		config['domoticz'] = { 'protocol' : 'http', 'host':'localhost', 'port':'8080'}
 		config['verisure'] = { 'username':'', 'password':''}
 		config['global'] = { 'loglevel':'warning', 'timezone':'local'}
+		config['email'] = { 'host':'', 'port':'567', 'ssl':'true', 'folder':'', 'username':'', 'password':''}
 		config['sensorindex'] = { 'sms count':'XX', 'arm state':'XX', 'AAAA BBBB':'XX'}
 		
 		try:
@@ -45,6 +47,9 @@ def parseConfig(configFile):
 		requiredKeys['verisure'] = {'username', 'password'}
 		requiredKeys['global'] = {'loglevel', 'timezone'}
 		requiredKeys['sensorindex'] = {'sms count', 'arm state'}
+
+		if str.lower(additionalSection) is 'email':
+			requiredKeys['email'] = {'host','port','ssl','folder','username','password'}
 
 		for section in requiredKeys:
 			if not section in config:

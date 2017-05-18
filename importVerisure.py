@@ -189,7 +189,7 @@ def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device):
 def main():
 	global domoticzUrl, config
 	# Parse command line
-	arguments = parseArgs('importVerisure.py')
+	arguments = parseArgs('importVerisure.py', '0.3')
 
 	# Read config
 	config = parseConfig(arguments['configFile'])
