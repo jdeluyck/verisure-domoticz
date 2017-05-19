@@ -33,7 +33,7 @@ You'll also need the following sensors (mandatory):
     * 20: Armed Away
 
 #### vsure.ini
-The configuration is handled through an ini-style config file called vsure.ini (by default, you can specify any other using command line parameters)
+The configuration is handled through an ini-style config file called `vsure.ini` (by default, you can specify any other using command line parameters)
 
 The blank file written is
 ```
@@ -54,6 +54,15 @@ timezone = local
 aaaa bbbb = XX
 sms count = XX
 arm state = XX
+
+[email]
+enabled = false
+host =
+port = 
+ssl = 
+folder = 
+username = 
+password = 
 ```
 
   * The `domoticz` section contains parameters needed to connect to your Domoticz instance.
@@ -61,6 +70,14 @@ arm state = XX
   * `global` contains the timezone your domoticz is running in (specifying local here takes the time from /etc/timezone), and the default loglevel you want. You can choose from DEBUG, INFO, WARNING and ERROR.
   * `sensorindex` is the block where you need to match up the serial ID if your Verisure components with the sensor index in Domoticz. Say your device has an identifier of JC2B XYZB, and the device identifier in Domoticz is 10, you'll need to add a line reading `JC2B XYZB = 10`.
     You also need to keep the lines `sms count = xx` and `arm state = xx`, and specify the sensor index from Domoticz. These reflect the SMS counter and the alarm armed status.
+  * The `email` section contains the configuration parameters to connect to your email provider. See below for more info.
+
+#### Email configuration
+In case you want to use the mail polling script `monitorVerisureMail.py`, you'll need to add a user in the Verisure configuration and configure it to receive mails on Alarm events. You'll also need to add a filter so that all those mails are filtered into a specific subfolder.
+Then supply the necessary email server info in the `vsure.ini` configuration file.
+  * `host`: your email IMAP server. _POP3 is not supported at this time_
+	* `port`: the port to connect to. This is usually related directly to the parameter `ssl` (encryption)
+	* `folder`: the folder in which we will receive mails from Verisure. I decided to not check which mails we get in this folder, but just to trigger the `importVerisure.py` script. This works around several issues, including language, formatting, ...
 
 ### Command line parameters
 The easiest way to get them is to ask for them ;)
@@ -81,10 +98,12 @@ optional arguments:
                         vsure.ini
 ```
 
-### Scheduling through cron
+### Scheduling importVerisure.py through cron
 Easy as
 ```
 */10 * * * * /home/domoticz/importVerisure.py
 ```
 
 I don't know what the call limit is on the API, but I've not gotten any errors with a 10 minute interval.
+
+### Running monitorVerisureMail.py
