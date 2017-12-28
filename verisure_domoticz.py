@@ -48,7 +48,7 @@ def parseConfig(configFile, additionalConfigSection=''):
 		requiredKeys['global'] = {'loglevel', 'timezone'}
 		requiredKeys['sensorindex'] = {'sms count', 'arm state'}
 
-		if str.lower(additionalSection) is 'email':
+		if str.lower(additionalConfigSection) is 'email':
 			requiredKeys['email'] = {'host','port','ssl','folder','username','password'}
 
 		for section in requiredKeys:
