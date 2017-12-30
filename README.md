@@ -2,7 +2,7 @@
 Scripts to query Verisure and pump the data into Domoticz
 
 ## License
-These scripts are licensed under the GPL 3.0. You can find the full license in the LICENSE file.
+These scripts are licensed under the GPL 3.0. You can find the full license in the [LICENSE](https://github.com/jdeluyck/verisure-domoticz/LICENSE) file.
 
 ## Credits
 These scripts wouldn't exist without [verisure module](https://github.com/persandstrom/python-verisure) by Per Sandström.
@@ -12,7 +12,7 @@ This script is designed to log into the Verisure API, and get out all the inform
 It then processes the devices specified in `vsure.ini` (see below) to see which ones it needs to upload into Domoticz.
 
 ## monitorVerisureMail.py
-This script is designed to open an imap idle connection to a mailbox folder, to monitor for Verisure events. This allows us to react quicker to specific events, than every X minutes (as specified by the cron job). See Email Configuration below.
+This script is designed to open an imap idle connection to a mailbox folder, to monitor for Verisure events. This allows us to react quicker to specific events, than every X minutes (as specified by the cron job). 
 
 ### Configuring
 Configuration is handled through an ini-style configuration file. By default, when run the first time, the script will create a file in the current directory called `vsure.ini`.
@@ -86,7 +86,7 @@ Then supply the necessary email server info in the `vsure.ini` configuration fil
 The easiest way to get them is to ask for them ;)
 ```
 $ ./importVerisure.py -h
-usage: importVerisure.py [-h] [-v] [-l {info,warning,error,debug}]
+usage: importVerisure.py [-h] [-v] [-l {info,warning,error,debug,critical}]
                          [-c CONFIGFILE]
 
 Import Verisure information into Domoticz
@@ -94,12 +94,11 @@ Import Verisure information into Domoticz
 optional arguments:
   -h, --help            show this help message and exit
   -v, --version         show program's version number and exit
-  -l {info,warning,error,debug}, --log {info,warning,error,debug}
+  -l {info,warning,error,debug,critical}, --log {info,warning,error,debug,critical}
                         Specifies the loglevel to be used
   -c CONFIGFILE, --config CONFIGFILE
                         Name of the configuration file to use (default:
-                        vsure.ini
-```
+                        vsure.ini```
 
 ### Scheduling importVerisure.py through cron
 Easy as
@@ -109,4 +108,5 @@ Easy as
 
 I don't know what the call limit is on the API, but I've not gotten any errors with a 10 minute interval.
 
-### Running monitorVerisureMail.py
+### Scheduling monitorVerisureMail.py
+

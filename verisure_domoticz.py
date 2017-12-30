@@ -13,7 +13,7 @@ import os.path
 def parseArgs(progName, progVersion):
     parser = argparse.ArgumentParser(description = 'Import Verisure information into Domoticz', prog=progName)
     parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + progVersion)
-    parser.add_argument('-l', '--log', dest='logLevel',type=str, choices=['info', 'warning', 'error', 'debug'], help='Specifies the loglevel to be used')
+    parser.add_argument('-l', '--log', dest='logLevel',type=str, choices=['info', 'warning', 'error', 'debug', 'critical'], help='Specifies the loglevel to be used')
     parser.add_argument('-c', '--config', dest='configFile', default='vsure.ini', type=str, help='Name of the configuration file to use (default: %(default)s')
 
     results = parser.parse_args()
