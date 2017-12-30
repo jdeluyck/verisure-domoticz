@@ -11,6 +11,9 @@ These scripts wouldn't exist without [verisure module](https://github.com/persan
 This script is designed to log into the Verisure API, and get out all the information of the system at that time.
 It then processes the devices specified in `vsure.ini` (see below) to see which ones it needs to upload into Domoticz.
 
+## monitorVerisureMail.py
+This script is designed to open an imap idle connection to a mailbox folder, to monitor for Verisure events. This allows us to react quicker to specific events, than every X minutes (as specified by the cron job). See Email Configuration below.
+
 ### Configuring
 Configuration is handled through an ini-style configuration file. By default, when run the first time, the script will create a file in the current directory called `vsure.ini`.
 
