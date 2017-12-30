@@ -108,5 +108,8 @@ Easy as
 
 I don't know what the call limit is on the API, but I've not gotten any errors with a 10 minute interval.
 
-### Scheduling monitorVerisureMail.py
+### Using monitorVerisureMail.py
+Since I'm already running Domoticz through `systemd`, it was only logical to create a systemd unit file for this. You can find it [here](https://github.com/jdeluyck/verisure-domoticz/monitorVerisureMail.service)
+
+You can copy it to `/etc/systemd/system`, install it using `systemctl enable monitorVerisureMail.py` and start it with `systemctl start monitorVerisureMail.py`. You'll probably have to modify it to your installation.
 

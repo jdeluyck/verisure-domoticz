@@ -1,0 +1,13 @@
+[Unit]
+Description=Monitor Verisure Mails
+After=domoticz.service
+
+[Service]
+ExecStart=/home/domoticz/domoticz/scripts/python/verisure-domoticz/monitorVerisureMail.py -c /home/domoticz/domoticz/scripts/python/verisure-domoticz/vsure.ini
+Restart=on-failure
+User=domoticz
+Group=domoticz
+
+[Install]
+WantedBy=multi-user.target
+
