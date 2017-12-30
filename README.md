@@ -81,6 +81,7 @@ Then supply the necessary email server info in the `vsure.ini` configuration fil
   * `port`: the port to connect to. This is usually related directly to the parameter `ssl` (encryption)
   * `ssl`: wether or not to activate SSL from the get-go. The script will try to use STARTTLS if available.
   * `folder`: the folder in which we will receive mails from Verisure. I decided to not check which mails we get in this folder, but just to trigger the `importVerisure.py` script. This works around several issues, including language, formatting, ...
+  * `username` and `password` should be self-explanatory. At this time no support for OAuth has been included, though it's possible with IMAPClient.
 
 ### Command line parameters
 The easiest way to get them is to ask for them ;)
