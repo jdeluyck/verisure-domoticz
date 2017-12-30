@@ -2,7 +2,7 @@
 Scripts to query Verisure and pump the data into Domoticz
 
 ## License
-These scripts are licensed under the GPL 3.0. You can find the full license in the [LICENSE](https://github.com/jdeluyck/verisure-domoticz/LICENSE) file.
+These scripts are licensed under the GPL 3.0. You can find the full license in the [LICENSE](https://github.com/jdeluyck/verisure-domoticz/blob/master/LICENSE) file.
 
 ## Credits
 These scripts wouldn't exist without [verisure module](https://github.com/persandstrom/python-verisure) by Per Sandström.
@@ -110,7 +110,7 @@ Easy as
 I don't know what the call limit is on the API, but I've not gotten any errors with a 10 minute interval.
 
 ### Using monitorVerisureMail.py
-Since I'm already running Domoticz through `systemd`, it was only logical to create a systemd unit file for this. You can find it [here](https://github.com/jdeluyck/verisure-domoticz/monitorVerisureMail.service)
+Since I'm already running Domoticz through `systemd`, it was only logical to create a systemd unit file for this. You can find it [here](https://github.com/jdeluyck/verisure-domoticz/blob/master/monitorVerisureMail.service)
 
 You can copy it to `/etc/systemd/system`, install it using `systemctl enable monitorVerisureMail.py` and start it with `systemctl start monitorVerisureMail.py`. You'll probably have to modify it to your installation.
 
