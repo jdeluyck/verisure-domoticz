@@ -98,7 +98,8 @@ optional arguments:
                         Specifies the loglevel to be used
   -c CONFIGFILE, --config CONFIGFILE
                         Name of the configuration file to use (default:
-                        vsure.ini```
+                        vsure.ini
+```
 
 ### Scheduling importVerisure.py through cron
 Easy as
