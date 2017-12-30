@@ -59,7 +59,6 @@ sms count = XX
 arm state = XX
 
 [email]
-enabled = false
 host =
 port = 
 ssl = 
@@ -70,7 +69,7 @@ password =
 
   * The `domoticz` section contains parameters needed to connect to your Domoticz instance.
   * the `verisure` section specifies your username (email) and password to get into verisure.
-  * `global` contains the timezone your domoticz is running in (specifying local here takes the time from /etc/timezone), and the default loglevel you want. You can choose from DEBUG, INFO, WARNING and ERROR.
+  * `global` contains the timezone your domoticz is running in (specifying local here takes the time from /etc/timezone), and the default loglevel you want. You can choose from DEBUG, INFO, WARNING, ERROR and CRITICAL. Note: DEBUG will output your passwords, too!
   * `sensorindex` is the block where you need to match up the serial ID if your Verisure components with the sensor index in Domoticz. Say your device has an identifier of JC2B XYZB, and the device identifier in Domoticz is 10, you'll need to add a line reading `JC2B XYZB = 10`.
     You also need to keep the lines `sms count = xx` and `arm state = xx`, and specify the sensor index from Domoticz. These reflect the SMS counter and the alarm armed status.
   * The `email` section contains the configuration parameters to connect to your email provider. See below for more info.
@@ -79,8 +78,9 @@ password =
 In case you want to use the mail polling script `monitorVerisureMail.py`, you'll need to add a user in the Verisure configuration and configure it to receive mails on Alarm events. You'll also need to add a filter so that all those mails are filtered into a specific subfolder.
 Then supply the necessary email server info in the `vsure.ini` configuration file.
   * `host`: your email IMAP server. _POP3 is not supported at this time_
-	* `port`: the port to connect to. This is usually related directly to the parameter `ssl` (encryption)
-	* `folder`: the folder in which we will receive mails from Verisure. I decided to not check which mails we get in this folder, but just to trigger the `importVerisure.py` script. This works around several issues, including language, formatting, ...
+  * `port`: the port to connect to. This is usually related directly to the parameter `ssl` (encryption)
+  * `ssl`: wether or not to activate SSL from the get-go. The script will try to use STARTTLS if available.
+  * `folder`: the folder in which we will receive mails from Verisure. I decided to not check which mails we get in this folder, but just to trigger the `importVerisure.py` script. This works around several issues, including language, formatting, ...
 
 ### Command line parameters
 The easiest way to get them is to ask for them ;)
