@@ -207,27 +207,39 @@ def main():
     verisureOverview = getVerisureInfo(config['verisure']['username'], config['verisure']['password'])
     
     # Process climateValues
-    for device in verisureOverview['climateValues']:
-        if device['deviceLabel'] in config['sensorindex']:
-            processUpdates('climate', config['sensorindex'][device['deviceLabel']], device['time'], device)
+    if 'climateValues' in verisureOverview:
+        for device in verisureOverview['climateValues']:
+            if device['deviceLabel'] in config['sensorindex']:
+                processUpdates('climate', config['sensorindex'][device['deviceLabel']], device['time'], device)
     
     # Process DoorWindowDevices
-    for device in verisureOverview['doorWindow']['doorWindowDevice']:
-        if device['deviceLabel'] in config['sensorindex']:
-            processUpdates('doorwindow', config['sensorindex'][device['deviceLabel']], device['reportTime'], device)
+    if 'doorWindowDevice' in verisureOverview:
+        for device in verisureOverview['doorWindow']['doorWindowDevice']:
+            if device['deviceLabel'] in config['sensorindex']:
+                processUpdates('doorwindow', config['sensorindex'][device['deviceLabel']], device['reportTime'], device)
 
     # Process SMS
-    processUpdates('smscount', config['sensorindex']['sms count'], arrow.now(), verisureOverview)
+    if 'totalSmsCount' in verisureOverview:
+        processUpdates('smscount', config['sensorindex']['sms count'], arrow.now(), verisureOverview)
     
     # Process Alarm State
-    processUpdates('armstate', config['sensorindex']['arm state'], verisureOverview['armState']['date'], verisureOverview['armState'])
+    if 'armState' in verisureOverview:
+        processUpdates('armstate', config['sensorindex']['arm state'], verisureOverview['armState']['date'], verisureOverview['armState'])
 
     # Process Ethernet State
-    processUpdates('ethstate', config['sensorindex'][verisureOverview['latestEthernetStatus']['deviceLabel']], verisureOverview['latestEthernetStatus']['testDate'], verisureOverview['latestEthernetStatus'])
+    if 'latestEthernetStatus' in verisureOverview:
+        processUpdates('ethstate', config['sensorindex'][verisureOverview['latestEthernetStatus']['deviceLabel']], verisureOverview['latestEthernetStatus']['testDate'], verisureOverview['latestEthernetStatus'])
     
     # Process Switch State
-    for device in zip(verisureOverview['smartplugs'], verisureOverview['controlplugs']):
-        processUpdates('switchstate', config['sensorindex'][device['deviceLabel']], arrow.now(), device)
+    if 'smartplugs' in verisureOverview:
+        for device in verisureOverview['smartplugs']:
+            if device['deviceLabel'] in config['sensorindex']:
+                processUpdates('switchstate', config['sensorindex'][device['deviceLabel']], arrow.now(), device)
+    
+    if 'controlplugs' in verisureOverview:
+        for device in verisureOverview['controlplugs']:
+            if device['deviceLabel'] in config['sensorindex']:
+                processUpdates('switchstate', config['sensorindex'][device['deviceLabel']], arrow.now(), device)
 
 
 # Execute script
