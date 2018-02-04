@@ -227,7 +227,7 @@ def main():
     
     # Process Switch State
     for device in zip(verisureOverview['smartplugs'], verisureOverview['controlplugs']):
-        processUpdates('switchstate', config['sensorindex'][device['deviceLabel'], arrow.now(), device)
+        processUpdates('switchstate', config['sensorindex'][device['deviceLabel']], arrow.now(), device)
 
 
 # Execute script
