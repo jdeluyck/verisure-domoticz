@@ -167,7 +167,7 @@ def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device):
             elif deviceType == 'switchstate':
                 # Control/Smart switch state
                 logging.info (' - Updating switch state to %s', device['currentState'])
-                requestUrl = '&type=command&param=switchlight&idx=' + sensorIdx + '&switchcmd=' + str(device['correntState'])
+                requestUrl = '&type=command&param=switchlight&idx=' + sensorIdx + '&switchcmd=' + str(device['currentState'])
                 
             else:
                 logging.error ('Error: Unknown device type!')
@@ -226,7 +226,7 @@ def main():
     processUpdates('ethstate', config['sensorindex'][verisureOverview['latestEthernetStatus']['deviceLabel']], verisureOverview['latestEthernetStatus']['testDate'], verisureOverview['latestEthernetStatus'])
     
     # Process Switch State
-    for device in zip(verisureOverview['smartplugs'], verisureOverview'[controlplugs']):
+    for device in zip(verisureOverview['smartplugs'], verisureOverview['controlplugs']):
         processUpdates('switchstate', config['sensorindex'][device['deviceLabel'], arrow.now(), device)
 
 
