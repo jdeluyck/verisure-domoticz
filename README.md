@@ -25,8 +25,13 @@ Next, you need to add (using `Create virtual Sensors`) the following sensors **p
   * Siren: Temperature sensor
   * Door/window magnetic lock: Switch (on/off)
   * Ethernet status: Switch (on/off)
+  * Voicebox: Temperature sensor
+  * Passive Infrared Sensor: temperature sensor
+  * Smart plugs / control plugs: Switch (on/off) 
 
-I don't own any other devices (smart plugs, camera's, ...) in my own setup, so I'm not 100% sure on what sensor information I need. Feel free to [add an issue](https://github.com/jdeluyck/verisure-domoticz/issues/new) with additional information. Ideally add the output of `vsure youruser yourpass overview`, but remove any sensitive info (like actual component identifiers).
+I only own a limited selection of devices, so if it's not in the list above, I'm not 100% sure on what sensor information I need. Feel free to [add an issue](https://github.com/jdeluyck/verisure-domoticz/issues/new) with additional information. Ideally add the output of `vsure youruser yourpass overview`, but remove any sensitive info (like actual component identifiers).
+
+Thanks to [IvovanTulden](https://github.com/IvovanTulden) I've added the voicebox, passive infrared sensor and smart/control plugs!
 
 You'll also need the following sensors (mandatory):
   * SMS Counter: Custom Sensor, X Axis: SMS Count

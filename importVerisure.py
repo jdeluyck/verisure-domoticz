@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Version 0.3
+# Version 0.4
 # Author: Jan De Luyck (jan@kcore.org) 
 # Licensed under the GPL v3.0
 # URL: https://github.com/jdeluyck/verisure-domoticz/
@@ -163,6 +163,11 @@ def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device):
                 
                 logging.info (' - Updating ethernet state to %s', ethernetState)
                 requestUrl = 'type=command&param=switchlight&idx=' + sensorIdx + '&switchcmd=' + ethernetState
+
+            elif deviceType == 'switchstate':
+                # Control/Smart switch state
+                logging.info (' - Updating switch state to %s', device['currentState'])
+                requestUrl = '&type=command&param=switchlight&idx=' + sensorIdx + '&switchcmd=' + str(device['correntState'])
                 
             else:
                 logging.error ('Error: Unknown device type!')
@@ -184,7 +189,7 @@ def processUpdates(deviceType, sensorIdx, deviceLastUpdated, device):
 def main():
     global domoticzUrl, config
     # Parse command line
-    arguments = parseArgs('importVerisure.py', '0.3')
+    arguments = parseArgs('importVerisure.py', '0.4')
 
     # Read config
     config = parseConfig(arguments['configFile'])
@@ -219,6 +224,10 @@ def main():
 
     # Process Ethernet State
     processUpdates('ethstate', config['sensorindex'][verisureOverview['latestEthernetStatus']['deviceLabel']], verisureOverview['latestEthernetStatus']['testDate'], verisureOverview['latestEthernetStatus'])
+    
+    # Process Switch State
+    for device in zip(verisureOverview['smartplugs'], verisureOverview'[controlplugs']):
+        processUpdates('switchstate', config['sensorindex'][device['deviceLabel'], arrow.now(), device)
 
 
 # Execute script

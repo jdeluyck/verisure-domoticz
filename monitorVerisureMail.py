@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Version 0.3
+# Version 0.4
 # Author: Jan De Luyck (jan@kcore.org) 
 # Licensed under the GPL v3.0
 # URL: https://github.com/jdeluyck/verisure-domoticz/
@@ -17,7 +17,7 @@ from verisure_domoticz import parseArgs, parseConfig
 def main():
     global domoticzUrl, config
     # Parse command line
-    arguments = parseArgs('monitorVerisureMail.py', '0.3')
+    arguments = parseArgs('monitorVerisureMail.py', '0.4')
 
     # Read config
     config = parseConfig(arguments['configFile'], 'email')
